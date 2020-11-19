@@ -20,10 +20,10 @@ namespace WorkshopNetCore.MachineLearning
         public float PassantsActuel { get; set; }
 
         public float EstimationInferieure { get; set; }
+        
+        public float Estimation { get; set; }
 
         public float EstimationSuperieure { get; set; }
-
-        public float Estimation { get; set; }
 
 
         public FeuForecast()
@@ -31,7 +31,7 @@ namespace WorkshopNetCore.MachineLearning
 
         }
 
-        public FeuForecast(int idFeu, string matricule, int jour, float semaine, int heure, float passantsActuel, float estimationInferieure, float estimationSuperieure, float estimation)
+        public FeuForecast(int idFeu, string matricule, int jour, float semaine, int heure, float passantsActuel, float estimationInferieure, float estimation, float estimationSuperieure)
         {
             IdFeu = idFeu;
             Matricule = matricule;
@@ -39,8 +39,8 @@ namespace WorkshopNetCore.MachineLearning
             Heure = heure;
             PassantsActuel = passantsActuel;
             EstimationInferieure = estimationInferieure;
-            EstimationSuperieure = estimationSuperieure;
             Estimation = estimation;
+            EstimationSuperieure = estimationSuperieure;
 
             switch (jour)
             {

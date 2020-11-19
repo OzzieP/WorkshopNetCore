@@ -20,11 +20,10 @@
                         console.log(liste);
                         var data = google.visualization.arrayToDataTable([
                             ['Heure', 'Passage', 'Estimation', 'Estimation inférieure', 'Estimation supérieure'],
-                            liste.forEach((item) => {
-                            // ici push les datas dans les bonne colone en utiilsant item
-                                data.push(item.Heure, item.PassantsActuel, item.Estimation, item.EstimationInferieure, item.EstimationSuperieure);
-                            })
                         ]);
+                        liste.forEach((item) => {
+                            data.push(item.Heure, item.PassantsActuel, item.Estimation, item.EstimationInferieure, item.EstimationSuperieure);
+                        })
 
                         var options = {
                             title: 'Prévision du nombre de passages sur 24H',
@@ -66,7 +65,7 @@
 
 <input type="button" onclick="AfficheDiagramme()" name="btPrev" value="Prévisions" />
 
-<div id="chart_div"></div>
+<div id="chart_div" style="width: 100%; height: 500px;"></div>
 
 
 
