@@ -54,7 +54,6 @@ namespace WorkshopNetCore.Controllers
             arr.Add("C1-HR2", database.GetEtatFeu("C1-HR2"));
 
             var json = JsonConvert.SerializeObject(arr);
-            //var json = new JavaScriptSerializer().Serialize(arr);
             return json;
         }
 
@@ -73,7 +72,6 @@ namespace WorkshopNetCore.Controllers
             List<FeuForecast> feux = ModelBuilder.FeuForecasts;
 
             var json = JsonConvert.SerializeObject(feux);
-            //var json = new JavaScriptSerializer().Serialize(feux);
             return json;
         }
 

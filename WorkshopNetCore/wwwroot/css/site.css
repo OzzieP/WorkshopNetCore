@@ -1,71 +1,307 @@
-﻿/* Please see documentation at https://docs.microsoft.com/aspnet/core/client-side/bundling-and-minification
-for details on configuring this project to bundle and minify static web assets. */
-
-a.navbar-brand {
-  white-space: normal;
-  text-align: center;
-  word-break: break-all;
+﻿body {
+    padding-top: 50px;
+    padding-bottom: 20px;
 }
 
-/* Provide sufficient contrast against white background */
-a {
-  color: #0366d6;
+/* Set padding to keep content from hitting the edges */
+.body-content {
+    padding-left: 15px;
+    padding-right: 15px;
 }
 
-.btn-primary {
-  color: #fff;
-  background-color: #1b6ec2;
-  border-color: #1861ac;
+/* Override the default bootstrap behavior where horizontal description lists 
+   will truncate terms that are too long to fit in the left column 
+*/
+.dl-horizontal dt {
+    white-space: normal;
 }
 
-.nav-pills .nav-link.active, .nav-pills .show > .nav-link {
-  color: #fff;
-  background-color: #1b6ec2;
-  border-color: #1861ac;
+/* Set width on the form input elements since they're 100% wide by default */
+input,
+select,
+textarea {
+    max-width: 280px;
 }
 
-/* Sticky footer styles
--------------------------------------------------- */
-html {
-  font-size: 14px;
-}
-@media (min-width: 768px) {
-  html {
-    font-size: 16px;
-  }
-}
-
-.border-top {
-  border-top: 1px solid #e5e5e5;
-}
-.border-bottom {
-  border-bottom: 1px solid #e5e5e5;
+.index-container {
+    position: absolute;
+    top: 50px;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: rgb(78, 83, 92);
+    overflow: hidden;
 }
 
-.box-shadow {
-  box-shadow: 0 .25rem .75rem rgba(0, 0, 0, .05);
+
+/* Formulaire du nombre de passants */
+
+.posForm {
+    position: absolute;
+    top: 20px;
+    left: 40px;
+    width: 356px;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+    background-color: rgb(210, 210, 210);
+    padding: 14px;
+    border-radius: 5px;
 }
 
-button.accept-policy {
-  font-size: 1rem;
-  line-height: inherit;
+    .posForm .inputs div {
+        display: flex;
+        justify-content: space-around;
+        align-items: center;
+    }
+
+    .posForm input {
+        margin-bottom: 14px;
+        min-width: 300px !important;
+        display: inline-block;
+    }
+
+/* Affichage de la route */
+
+.background {
+    position: absolute;
+    top: 0;
+    right: 0;
+    left: 0;
+    bottom: 0;
 }
 
-/* Sticky footer styles
--------------------------------------------------- */
-html {
-  position: relative;
-  min-height: 100%;
+.route1 {
+    width: 300px;
+    height: 100%;
+    background-color: gray;
+    margin-left: calc(50% - 150px);
 }
 
-body {
-  /* Margin bottom by footer height */
-  margin-bottom: 60px;
+.route2 {
+    position: absolute;
+    width: 100%;
+    height: 300px;
+    background-color: gray;
+    top: calc(50% - 150px);
 }
-.footer {
-  position: absolute;
-  bottom: 0;
-  width: 100%;
-  white-space: nowrap;
-  line-height: 60px; /* Vertically center the text there */
+
+.route1bis {
+    border-right: dashed white;
+    height: 100%;
+    width: 150px;
+}
+
+.route2bis {
+    border-bottom: dashed white;
+    height: 150px;
+    width: 100%;
+}
+
+.carrefour {
+    position: absolute;
+    background-color: gray;
+    width: 300px;
+    height: 300px;
+    top: calc(50% - 150px);
+    left: calc(50% - 150px);
+}
+
+/* Affichage des flêches */
+
+.arrow {
+    font-size: 80px !important;
+    color: white;
+}
+
+.arrow1pos {
+    width: 150px;
+    height: 150px;
+    position: absolute;
+    top: -260px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    font-size: 18px;
+}
+
+.arrow2pos {
+    width: 150px;
+    height: 150px;
+    position: absolute;
+    left: 410px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    font-size: 18px;
+}
+
+.arrow3pos {
+    width: 150px;
+    height: 150px;
+    position: absolute;
+    top: 410px;
+    left: 150px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    font-size: 18px;
+}
+
+.arrow4pos {
+    width: 150px;
+    height: 150px;
+    position: absolute;
+    top: 150px;
+    left: -260px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    font-size: 18px;
+}
+
+/* Affichage des passage pietons */
+
+.pieton1 {
+    display: flex;
+    width: 300px;
+    height: 80px;
+    position: absolute;
+    top: -120px;
+}
+
+.pieton2 {
+    width: 80px;
+    height: 300px;
+    position: absolute;
+    left: 340px;
+}
+
+.pieton3 {
+    display: flex;
+    width: 300px;
+    height: 80px;
+    position: absolute;
+    top: 340px;
+}
+
+.pieton4 {
+    position: absolute;
+    width: 80px;
+    height: 300px;
+    left: -120px;
+}
+
+.barp1 {
+    height: 100%;
+    width: 20px;
+    margin-left: 20px;
+    background-color: white;
+}
+
+.barp2 {
+    width: 100%;
+    height: 20px;
+    margin-top: 20px;
+    background-color: white;
+}
+
+/* Affichage des feux */
+
+.G1 {
+    height: 40px;
+    position: absolute;
+    top: -100px;
+    left: -80px;
+    display: flex;
+    background-color: black;
+}
+
+.G2 {
+    height: 40px;
+    position: absolute;
+    top: -40px;
+    left: 340px;
+    display: flex;
+    background-color: black;
+}
+
+.G3 {
+    height: 40px;
+    position: absolute;
+    top: 360px;
+    left: 300px;
+    display: flex;
+    background-color: black;
+}
+
+.G4 {
+    height: 40px;
+    position: absolute;
+    top: 300px;
+    left: -120px;
+    display: flex;
+    background-color: black;
+}
+
+/* Affichage des chart */
+#chart_div {
+    width: 150px;
+    height: 150px;
+    position: absolute;
+    left: -260px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+#chart_div1 {
+    width: 150px;
+    height: 150px;
+    position: absolute;
+    left: 410px;
+    top: 150px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+#chart_div2 {
+    width: 150px;
+    height: 150px;
+    position: absolute;
+    top: -260px;
+    left: 15px;
+    display: flex;
+    left: 150px;
+    justify-content: center;
+    align-items: center;
+}
+
+#chart_div3 {
+    width: 150px;
+    height: 150px;
+    position: absolute;
+    top: 410px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+/* Misc */
+.red {
+    color: red;
+}
+
+.green {
+    color: green;
+}
+
+
+.feux {
+    font-size: 40px !important;
 }
