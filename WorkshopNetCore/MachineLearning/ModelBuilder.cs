@@ -25,7 +25,7 @@ namespace WorkshopNetCore.MachineLearning
             string rootDir = Path.GetFullPath(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "../../../"));
             string modelPath = Path.Combine(rootDir, "MachineLearning", "Data", "MLModel.zip");
 
-            string query = "SELECT f.matricule AS Feu, CAST(e.nbPassant as REAL) AS NbPassants, CAST(e.jour as REAL) AS Jour, CAST(e.numWeek as REAL) as Semaine " +
+            string query = "SELECT CAST(f.idFeu as REAL) AS IdFeu, f.matricule AS Feu, CAST(e.nbPassant as REAL) AS NbPassants, CAST(e.jour as REAL) AS Jour, CAST(e.numWeek as REAL) as Semaine " +
                 "FROM etat e " +
                 "INNER JOIN feu f ON e.idFeu = f.idFeu " +
                 $"WHERE e.idFeu = {idFeu} AND e.numWeek = {numWeek}";
@@ -64,13 +64,15 @@ namespace WorkshopNetCore.MachineLearning
                 .Take(horizon)
                 .Select((ModelInput passants, int index) =>
                 {
+                    int idFeu = (int)passants.IdFeu;
+                    string matricule = passants.Feu;
                     string jour = Enum.GetName(typeof(DayOfWeek), (int)passants.Jour);
                     float semaine = passants.Semaine;
                     float actualPassants = passants.NbPassants;
                     float lowerEstimate = Math.Max(0, forecast.LowerBoundPassants[index]);
                     float estimate = forecast.ForecastedPassants[index];
                     float upperEstimate = forecast.UpperBoundPassants[index];
-                    FeuForecast feu = new FeuForecast(jour, semaine, actualPassants, lowerEstimate, estimate, upperEstimate);
+                    FeuForecast feu = new FeuForecast(idFeu, matricule, jour, semaine, index++, actualPassants, lowerEstimate, estimate, upperEstimate);
 
                     return feu;
                 });

@@ -6,6 +6,8 @@ using System.Data.SqlClient;
 using System.Linq;
 using System.Threading.Tasks;
 
+using WorkshopNetCore.MachineLearning;
+
 namespace WorkshopNetCore.Models
 {
     public class DatabaseHelper
@@ -415,6 +417,48 @@ namespace WorkshopNetCore.Models
                     command.Parameters.Add(new SqlParameter("@jour", jour));
                     command.Parameters.Add(new SqlParameter("@datetime", datetime));
                     command.Parameters.Add(new SqlParameter("@nbPassant", nbPassant));
+                    command.ExecuteNonQuery();
+                }
+            }
+        }
+
+        public void InsertFeuForecast(List<FeuForecast> forecasts)
+        {
+            using (SqlConnection connection = new SqlConnection(_connectionString))
+            {
+                connection.Open();
+                DeleteFeuForecast(forecasts.FirstOrDefault().IdFeu);
+
+                string query = "INSERT INTO etatPrev (idFeu, jour, nbPassantActuel, numWeek, estimation, estimationInferieure, estimationSuperieure) " +
+                    "VALUES (@IdFeu, @Jour, @NbPassantActuel, @NumWeek, @Estimation, @EstimationInferieure, @EstimationSuperieure)";
+
+                foreach (FeuForecast feu in forecasts)
+                {
+                    using (SqlCommand command = new SqlCommand(query, connection))
+                    {
+                        command.Parameters.AddWithValue("@IdFeu", feu.IdFeu);
+                        command.Parameters.AddWithValue("@Jour", feu.Jour);
+                        command.Parameters.AddWithValue("@NbPassantActuel", feu.PassantsActuel);
+                        command.Parameters.AddWithValue("@NumWeek", feu.Semaine);
+                        command.Parameters.AddWithValue("@Estimation", feu.Estimation);
+                        command.Parameters.AddWithValue("@EstimationInferieure", feu.EstimationInferieure);
+                        command.Parameters.AddWithValue("@EstimationSuperieure", feu.EstimationSuperieure);
+                        command.ExecuteNonQuery();
+                    }
+                }
+            }
+        }
+
+        private void DeleteFeuForecast(int idFeu)
+        {
+            using (SqlConnection connection = new SqlConnection(_connectionString))
+            {
+                connection.Open();
+                string query = "DELETE FROM etatPrev WHERE idFeu = @IdFeu";
+
+                using (SqlCommand command = new SqlCommand(query, connection))
+                {
+                    command.Parameters.AddWithValue("@IdFeu", idFeu);
                     command.ExecuteNonQuery();
                 }
             }
