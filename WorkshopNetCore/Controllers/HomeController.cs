@@ -77,7 +77,7 @@ namespace WorkshopNetCore.Controllers
         }
 
         [HttpPost]
-        public ActionResult GestionImprevu(FormCollection formCollection)
+        public ActionResult GestionImprevu(IFormCollection formCollection)
         {
             try
             {
