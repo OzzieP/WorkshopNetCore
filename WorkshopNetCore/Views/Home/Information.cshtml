@@ -21,14 +21,13 @@
 
                         var data = new google.visualization.DataTable();
                         data.addColumn("number", "heure");
-                        data.addColumn("number", "Passage");
                         data.addColumn("number", "Estimation");
                         data.addColumn("number", "Estimation inférieure");
                         data.addColumn("number", "Estimation supérieure");
                         liste.forEach((item) => {
 
                             data.addRows([
-                                [item.Heure, item.PassantsActuel, item.Estimation, item.EstimationInferieure, item.EstimationSuperieure]
+                                [item.Heure, item.Estimation, item.EstimationInferieure, item.EstimationSuperieure]
                             ]);
 
                         })
@@ -57,18 +56,6 @@
     {
         <option value="@feu.idFeu">@feu.matricule</option>
     }
-</select>
-
-<label>Choix du jours</label>
-
-<select>
-    <option value="1">Lundi</option>
-    <option value="2">Mardi</option>
-    <option value="3">Mercredi</option>
-    <option value="4">Jeudi</option>
-    <option value="5">Vendredi</option>
-    <option value="6">Samedi</option>
-    <option value="0">Dimanche</option>
 </select>
 
 <input type="button" onclick="AfficheDiagramme()" name="btPrev" value="Prévisions" />
