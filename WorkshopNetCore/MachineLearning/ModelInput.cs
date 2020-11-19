@@ -7,6 +7,8 @@ namespace WorkshopNetCore.MachineLearning
 {
     public class ModelInput
     {
+        public float IdFeu { get; set; }
+
         public float Semaine { get; set; }
 
         public float Jour { get; set; }
