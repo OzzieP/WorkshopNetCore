@@ -10,46 +10,48 @@
     google.charts.setOnLoadCallback(drawChart);
 
     function drawChart() {
-        const feux = 1;
-        $.getJSON('/home/RefreshChart', function (result) {
-            console.log(result);
-            feux = result;
-        });
-        const idFeux = ['C1-HR1', 'C1-HR2', 'C1-VR1', 'C1-VR2']
-        idFeux.forEach((idFeu) => {
-            if (feux[idFeu].etat) {
-                console.log(document.getElementById(idFeu))
-                document.getElementById(idFeu).classList.remove('red');
-                document.getElementById(idFeu).classList.add('green');
-                const idFeuP = idFeu.replace('R', 'P');
-                document.getElementById(idFeuP).classList.remove('green');
-                document.getElementById(idFeuP).classList.add('red');
-            } else {
-                console.log(document.getElementById(idFeu))
-                document.getElementById(idFeu).classList.remove('green');
-                document.getElementById(idFeu).classList.add('red');
-                const idFeuP = idFeu.replace('R', 'P');
-                document.getElementById(idFeuP).classList.remove('red');
-                document.getElementById(idFeuP).classList.add('green');
+        $.ajax({
+            url: "/home/RefreshChart",
+            dataType: 'json',
+            success: function (res) {
+                const feux = res;
+                const idFeux = ['C1-HR1', 'C1-HR2', 'C1-VR1', 'C1-VR2']
+                idFeux.forEach((idFeu) => {
+                    if (feux[idFeu].etat) {
+                        console.log(document.getElementById(idFeu))
+                        document.getElementById(idFeu).classList.remove('red');
+                        document.getElementById(idFeu).classList.add('green');
+                        const idFeuP = idFeu.replace('R', 'P');
+                        document.getElementById(idFeuP).classList.remove('green');
+                        document.getElementById(idFeuP).classList.add('red');
+                    } else {
+                        console.log(document.getElementById(idFeu))
+                        document.getElementById(idFeu).classList.remove('green');
+                        document.getElementById(idFeu).classList.add('red');
+                        const idFeuP = idFeu.replace('R', 'P');
+                        document.getElementById(idFeuP).classList.remove('red');
+                        document.getElementById(idFeuP).classList.add('green');
+                    }
+                });
+
+                var data = google.visualization.arrayToDataTable([
+                    ['Label', 'Value'],
+                    ['C1-HR1', feux['C1-HR1'].nbPassant]
+                ]);
+                var data1 = google.visualization.arrayToDataTable([
+                    ['Label', 'Value'],
+                    ['C1-HR2', feux['C1-HR2'].nbPassant]
+                ]);
+                var data2 = google.visualization.arrayToDataTable([
+                    ['Label', 'Value'],
+                    ['C1-VR1', feux['C1-VR1'].nbPassant]
+                ]);
+                var data3 = google.visualization.arrayToDataTable([
+                    ['Label', 'Value'],
+                    ['C1-VR2', feux['C1-VR2'].nbPassant]
+                ]);
             }
         });
-
-        var data = google.visualization.arrayToDataTable([
-            ['Label', 'Value'],
-            ['C1-HR1', feux['C1-HR1'].nbPassant]
-        ]);
-        var data1 = google.visualization.arrayToDataTable([
-            ['Label', 'Value'],
-            ['C1-HR2', feux['C1-HR2'].nbPassant]
-        ]);
-        var data2 = google.visualization.arrayToDataTable([
-            ['Label', 'Value'],
-            ['C1-VR1', feux['C1-VR1'].nbPassant]
-        ]);
-        var data3 = google.visualization.arrayToDataTable([
-            ['Label', 'Value'],
-            ['C1-VR2', feux['C1-VR2'].nbPassant]
-        ]);
 
         var options = {
             width: 200, height: 100,
