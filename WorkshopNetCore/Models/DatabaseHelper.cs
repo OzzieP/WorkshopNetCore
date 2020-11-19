@@ -429,8 +429,8 @@ namespace WorkshopNetCore.Models
                 connection.Open();
                 DeleteFeuForecast(forecasts.FirstOrDefault().IdFeu);
 
-                string query = "INSERT INTO etatPrev (idFeu, jour, nbPassantActuel, numWeek, estimation, estimationInferieure, estimationSuperieure) " +
-                    "VALUES (@IdFeu, @Jour, @NbPassantActuel, @NumWeek, @Estimation, @EstimationInferieure, @EstimationSuperieure)";
+                string query = "INSERT INTO etatPrev (idFeu, jour, heure, nbPassantActuel, numWeek, estimation, estimationInferieure, estimationSuperieure) " +
+                    "VALUES (@IdFeu, @Jour, @Heure, @NbPassantActuel, @NumWeek, @Estimation, @EstimationInferieure, @EstimationSuperieure)";
 
                 foreach (FeuForecast feu in forecasts)
                 {
@@ -438,6 +438,7 @@ namespace WorkshopNetCore.Models
                     {
                         command.Parameters.AddWithValue("@IdFeu", feu.IdFeu);
                         command.Parameters.AddWithValue("@Jour", feu.Jour);
+                        command.Parameters.AddWithValue("@Heure", feu.Heure);
                         command.Parameters.AddWithValue("@NbPassantActuel", feu.PassantsActuel);
                         command.Parameters.AddWithValue("@NumWeek", feu.Semaine);
                         command.Parameters.AddWithValue("@Estimation", feu.Estimation);
