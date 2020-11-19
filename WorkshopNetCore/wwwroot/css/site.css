@@ -1,6 +1,4 @@
 ﻿body {
-    padding-top: 50px;
-    padding-bottom: 20px;
 }
 
 /* Set padding to keep content from hitting the edges */
@@ -25,7 +23,7 @@ textarea {
 
 .index-container {
     position: absolute;
-    top: 50px;
+    top: 56px;
     left: 0;
     right: 0;
     bottom: 0;
@@ -40,7 +38,7 @@ textarea {
     position: absolute;
     top: 20px;
     left: 40px;
-    width: 356px;
+    width: 402px;
     display: flex;
     flex-direction: column;
     align-items: flex-end;
@@ -49,17 +47,21 @@ textarea {
     border-radius: 5px;
 }
 
-    .posForm .inputs div {
-        display: flex;
-        justify-content: space-around;
-        align-items: center;
-    }
+.posForm .inputs {
+    align-self: flex-start;
+}
 
-    .posForm input {
-        margin-bottom: 14px;
-        min-width: 300px !important;
-        display: inline-block;
-    }
+.posForm .inputs div {
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+}
+
+.posForm input {
+    margin-bottom: 14px;
+    min-width: 350px !important;
+    display: inline-block;
+}
 
 /* Affichage de la route */
 
