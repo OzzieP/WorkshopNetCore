@@ -31,17 +31,41 @@ namespace WorkshopNetCore.MachineLearning
 
         }
 
-        public FeuForecast(int idFeu, string matricule, string jour, float semaine, int heure, float passantsActuel, float estimationInferieure, float estimationSuperieure, float estimation)
+        public FeuForecast(int idFeu, string matricule, int jour, float semaine, int heure, float passantsActuel, float estimationInferieure, float estimationSuperieure, float estimation)
         {
             IdFeu = idFeu;
             Matricule = matricule;
-            Jour = jour;
             Semaine = semaine;
             Heure = heure;
             PassantsActuel = passantsActuel;
             EstimationInferieure = estimationInferieure;
             EstimationSuperieure = estimationSuperieure;
             Estimation = estimation;
+
+            switch (jour)
+            {
+                case (int)DayOfWeek.Monday:
+                    Jour = "Lundi";
+                    break;
+                case (int)DayOfWeek.Tuesday:
+                    Jour = "Mardi";
+                    break;
+                case (int)DayOfWeek.Wednesday:
+                    Jour = "Mercredi";
+                    break;
+                case (int)DayOfWeek.Thursday:
+                    Jour = "Jeudi";
+                    break;
+                case (int)DayOfWeek.Friday:
+                    Jour = "Vendredi";
+                    break;
+                case (int)DayOfWeek.Saturday:
+                    Jour = "Samedi";
+                    break;
+                case (int)DayOfWeek.Sunday:
+                    Jour = "Dimanche";
+                    break;
+            }
         }
     }
 }

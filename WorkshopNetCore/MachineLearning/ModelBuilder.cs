@@ -66,7 +66,7 @@ namespace WorkshopNetCore.MachineLearning
                 {
                     int idFeu = (int)passants.IdFeu;
                     string matricule = passants.Feu;
-                    string jour = Enum.GetName(typeof(DayOfWeek), (int)passants.Jour);
+                    int jour = (int)passants.Jour;
                     float semaine = passants.Semaine;
                     float actualPassants = passants.NbPassants;
                     float lowerEstimate = Math.Max(0, forecast.LowerBoundPassants[index]);
