@@ -70,6 +70,7 @@ namespace WorkshopNetCore.Controllers
             DatabaseHelper database = new DatabaseHelper();
             ModelBuilder.CreateModel(idFeu, weekNo);
             List<FeuForecast> feux = ModelBuilder.FeuForecasts;
+            database.InsertFeuForecast(feux);
 
             var json = JsonConvert.SerializeObject(feux);
             return json;
@@ -142,14 +143,6 @@ namespace WorkshopNetCore.Controllers
         {
             DatabaseHelper database = new DatabaseHelper();
             ViewBag.feu = database.GetListFeu();
-
-
-            return View();
-        }
-
-        [HttpPost]
-        public ActionResult GenerateForecast()
-        {
 
 
             return View();
