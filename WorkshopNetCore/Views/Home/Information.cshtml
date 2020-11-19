@@ -1,0 +1,76 @@
+﻿
+@{
+    ViewBag.Title = "Information";
+}
+
+<script type="text/javascript">
+
+        function AfficheDiagramme() {
+                $.ajax({
+                url: "/home/GetPrev",
+                dataType: "json",
+                type: "GET",
+                contentType: 'application/json; charset=utf-8',
+                data: { idFeu: document.getElementById("selectFeu").value },
+                success: function (liste) {
+                    google.charts.load('current', { 'packages': ['corechart'] });
+                    google.charts.setOnLoadCallback(drawChart);
+                    function drawChart() {
+                        var idFeu = document.getElementById("selectFeu").value;
+                        console.log(liste);
+                        var data = google.visualization.arrayToDataTable([
+                            ['Heure', 'Passage', 'Estimation', 'Estimation inférieure', 'Estimation supérieure'],
+                            liste.forEach((item) => {
+                            // ici push les datas dans les bonne colone en utiilsant item
+                                data.push(item.Heure, item.PassantsActuel, item.Estimation, item.EstimationInferieure, item.EstimationSuperieure);
+                            })
+                        ]);
+
+                        var options = {
+                            title: 'Prévision du nombre de passages sur 24H',
+                            hAxis: { title: 'Heure', titleTextStyle: { color: '#333' } },
+                            vAxis: { minValue: 0 }
+                        };
+
+                        var chart = new google.visualization.AreaChart(document.getElementById('chart_div'));
+                        chart.draw(data, options);
+                    }
+                }
+            });
+        }
+
+</script>
+
+<h3>Prévisions du nombre de véhicules à venir par feu et par jour</h3>
+
+<label>Choix du feu</label>
+
+<select id="selectFeu">
+    @foreach (var feu in ViewBag.feu)
+    {
+        <option value="@feu.idFeu">@feu.matricule</option>
+    }
+</select>
+
+<label>Choix du jours</label>
+
+<select>
+    <option value="1">Lundi</option>
+    <option value="2">Mardi</option>
+    <option value="3">Mercredi</option>
+    <option value="4">Jeudi</option>
+    <option value="5">Vendredi</option>
+    <option value="6">Samedi</option>
+    <option value="0">Dimanche</option>
+</select>
+
+<input type="button" onclick="AfficheDiagramme()" name="btPrev" value="Prévisions" />
+
+<div id="chart_div"></div>
+
+
+
+
+
+
+
