@@ -18,11 +18,19 @@
                     function drawChart() {
                         var idFeu = document.getElementById("selectFeu").value;
                         console.log(liste);
-                        var data = google.visualization.arrayToDataTable([
-                            ['Heure', 'Passage', 'Estimation', 'Estimation inférieure', 'Estimation supérieure'],
-                        ]);
+
+                        var data = new google.visualization.DataTable();
+                        data.addColumn("number", "heure");
+                        data.addColumn("number", "Passage");
+                        data.addColumn("number", "Estimation");
+                        data.addColumn("number", "Estimation inférieure");
+                        data.addColumn("number", "Estimation supérieure");
                         liste.forEach((item) => {
-                            data.push(item.Heure, item.PassantsActuel, item.Estimation, item.EstimationInferieure, item.EstimationSuperieure);
+
+                            data.addRows([
+                                [item.Heure, item.PassantsActuel, item.Estimation, item.EstimationInferieure, item.EstimationSuperieure]
+                            ]);
+
                         })
 
                         var options = {
@@ -31,7 +39,7 @@
                             vAxis: { minValue: 0 }
                         };
 
-                        var chart = new google.visualization.AreaChart(document.getElementById('chart_div'));
+                        var chart = new google.visualization.AreaChart(document.getElementById('graph_div'));
                         chart.draw(data, options);
                     }
                 }
@@ -65,7 +73,7 @@
 
 <input type="button" onclick="AfficheDiagramme()" name="btPrev" value="Prévisions" />
 
-<div id="chart_div" style="width: 100%; height: 500px;"></div>
+<div id="graph_div" style="height:300px; width:80%;"></div>
 
 
 
