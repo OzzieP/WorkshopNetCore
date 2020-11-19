@@ -1,12 +1,17 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
+
+using Newtonsoft.Json;
 
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.Globalization;
 using System.Linq;
 using System.Threading.Tasks;
 
+using WorkshopNetCore.MachineLearning;
 using WorkshopNetCore.Models;
 using WorkshopNetCore.ViewModels;
 
@@ -47,7 +52,9 @@ namespace WorkshopNetCore.Controllers
             arr.Add("C1-VR2", database.GetEtatFeu("C1-VR2"));
             arr.Add("C1-HR1", database.GetEtatFeu("C1-HR1"));
             arr.Add("C1-HR2", database.GetEtatFeu("C1-HR2"));
-            var json = new JavaScriptSerializer().Serialize(arr);
+
+            var json = JsonConvert.SerializeObject(arr);
+            //var json = new JavaScriptSerializer().Serialize(arr);
             return json;
         }
 
@@ -65,7 +72,8 @@ namespace WorkshopNetCore.Controllers
             ModelBuilder.CreateModel(idFeu, weekNo);
             List<FeuForecast> feux = ModelBuilder.FeuForecasts;
 
-            var json = new JavaScriptSerializer().Serialize(feux);
+            var json = JsonConvert.SerializeObject(feux);
+            //var json = new JavaScriptSerializer().Serialize(feux);
             return json;
         }
 

@@ -77,51 +77,96 @@ namespace WorkshopNetCore.Models
         {
             DatabaseHelper helper = new DatabaseHelper();
 
-            helper.insertOneFeu(new Feu() { matricule = "C1-HR1" });
-            helper.insertOneFeu(new Feu() { matricule = "C1-VR1" });
-            helper.insertOneFeu(new Feu() { matricule = "C1-HR2" });
-            helper.insertOneFeu(new Feu() { matricule = "C1-VR2" });
+            helper.insertOneFeu(new Feu() { idFeu = 1, matricule = "C1-HR1" });
+            helper.insertOneFeu(new Feu() { idFeu = 2, matricule = "C1-VR1" });
+            helper.insertOneFeu(new Feu() { idFeu = 3, matricule = "C1-HR2" });
+            helper.insertOneFeu(new Feu() { idFeu = 4, matricule = "C1-VR2" });
 
             Dictionary<string, Feu> feux = helper.selectFeux();
 
 
             Random random = new Random();
+            Dictionary<string, int> passants = new Dictionary<string, int>();
+            feux.Values.ToList().ForEach(f => { passants.Add(f.matricule, 0); });
 
+            int c = 1;
             for (int jour = 0; jour < 7; jour++)
             {
                 for (int h = 0; h < 24; h++)
                 {
                     for (int m = 0; m < 60; m++)
                     {
-                        bool etatFeu = random.Next(0, 2) == 0;
+                        int C1_VR1 = passants["C1-VR1"] + genererAlea(random, h, m);
+                        int C1_VR2 = passants["C1-VR2"] + genererAlea(random, h, m);
+                        int C1_HR1 = passants["C1-HR1"] + genererAlea(random, h, m);
+                        int C1_HR2 = passants["C1-HR2"] + genererAlea(random, h, m);
 
-                        List<Feu> feuxHR = feux.Values.Where(f => f.matricule.StartsWith("C1-HR")).ToList();
-                        feuxHR.ForEach(f =>
-                        {
-                            Etat etat = new Etat()
-                            {
-                                etat = etatFeu,
-                                feu = f,
-                                jour = (JourEnum)jour,
-                                horaire = new DateTime(1, 1, 1, h, m, 0),
-                                nbPassant = (genererAlea(random, h, m))
-                            };
-                            helper.insertOneEtat(etat);
-                        });
+                        bool etatFeuHori = (C1_HR1 > C1_VR1 && C1_HR1 > C1_VR2) || (C1_HR2 > C1_VR1 && C1_HR2 > C1_VR2);
 
-                        List<Feu> feuxVR = feux.Values.Where(f => f.matricule.StartsWith("C1-VR")).ToList();
-                        feuxVR.ForEach(f =>
+                        if (etatFeuHori)
                         {
-                            Etat etat = new Etat()
-                            {
-                                etat = !etatFeu,
-                                feu = f,
-                                jour = (JourEnum)jour,
-                                horaire = new DateTime(1, 1, 1, h, m, 0),
-                                nbPassant = (genererAlea(random, h, m))
-                            };
-                            helper.insertOneEtat(etat);
-                        });
+                            passants["C1_VR1"] = C1_VR1;
+                            passants["C1_VR2"] = C1_VR2;
+                            passants["C1_HR1"] = 0;
+                            passants["C1_HR2"] = 0;
+                        }
+                        else
+                        {
+                            passants["C1_VR1"] = 0;
+                            passants["C1_VR2"] = 0;
+                            passants["C1_HR1"] = C1_HR1;
+                            passants["C1_HR2"] = C1_HR2;
+                        }
+
+                        Etat etat;
+
+                        etat = new Etat()
+                        {
+                            idEtat = c++,
+                            etat = !etatFeuHori,
+                            feu = feux["C1-VR1"],
+                            jour = (JourEnum)jour,
+                            horaire = new DateTime(2000, 1, 1, h, m, 0),
+                            semaine = 47,
+                            nbPassant = C1_VR1
+                        };
+                        helper.insertOneEtat(etat);
+
+                        etat = new Etat()
+                        {
+                            idEtat = c++,
+                            etat = !etatFeuHori,
+                            feu = feux["C1-VR2"],
+                            jour = (JourEnum)jour,
+                            horaire = new DateTime(2000, 1, 1, h, m, 0),
+                            semaine = 47,
+                            nbPassant = C1_VR2
+                        };
+                        helper.insertOneEtat(etat);
+
+                        etat = new Etat()
+                        {
+                            idEtat = c++,
+                            etat = etatFeuHori,
+                            feu = feux["C1-HR1"],
+                            jour = (JourEnum)jour,
+                            horaire = new DateTime(2000, 1, 1, h, m, 0),
+                            semaine = 47,
+                            nbPassant = C1_HR1
+                        };
+                        helper.insertOneEtat(etat);
+
+                        etat = new Etat()
+                        {
+                            idEtat = c++,
+                            etat = etatFeuHori,
+                            feu = feux["C1-HR2"],
+                            jour = (JourEnum)jour,
+                            horaire = new DateTime(2000, 1, 1, h, m, 0),
+                            semaine = 47,
+                            nbPassant = C1_HR2
+                        };
+                        helper.insertOneEtat(etat);
                     }
                 }
             }
@@ -131,18 +176,20 @@ namespace WorkshopNetCore.Models
 
         public void insertOneEtat(Etat etat)
         {
-            using (SqlConnection connection = new SqlConnection(Builder.ConnectionString))
+            using (SqlConnection connection = new SqlConnection(_connectionString))
             {
                 connection.Open();
 
                 using (SqlCommand command = connection.CreateCommand())
                 {
-                    command.CommandText = "INSERT INTO etat(idFeu, jour, horaire, nbPassant, etat) VALUES (@feu, @jour, @horaire, @passants, @etat);";
+                    command.CommandText = "INSERT INTO etat(idEtat, idFeu, jour, horaire, nbPassant, etat, numWeek) VALUES (@id, @feu, @jour, @horaire, @passants, @etat, @semaine);";
+                    command.Parameters.AddWithValue("@id", etat.idEtat);
                     command.Parameters.AddWithValue("@feu", etat.feu.idFeu);
                     command.Parameters.AddWithValue("@jour", etat.jour);
                     command.Parameters.AddWithValue("@horaire", etat.horaire);
                     command.Parameters.AddWithValue("@passants", etat.nbPassant);
                     command.Parameters.AddWithValue("@etat", etat.etat);
+                    command.Parameters.AddWithValue("@semaine", etat.semaine);
                     command.ExecuteNonQuery();
                 }
             }
@@ -150,13 +197,14 @@ namespace WorkshopNetCore.Models
 
         public void insertOneFeu(Feu feu)
         {
-            using (SqlConnection connection = new SqlConnection(Builder.ConnectionString))
+            using (SqlConnection connection = new SqlConnection(_connectionString))
             {
                 connection.Open();
 
                 using (SqlCommand command = connection.CreateCommand())
                 {
-                    command.CommandText = "INSERT INTO feu(matricule) VALUES (@matricule)";
+                    command.CommandText = "INSERT INTO feu(idFeu, matricule) VALUES (@feu, @matricule)";
+                    command.Parameters.AddWithValue("@feu", feu.idFeu);
                     command.Parameters.AddWithValue("@matricule", feu.matricule);
                     command.ExecuteNonQuery();
                 }
@@ -231,6 +279,36 @@ namespace WorkshopNetCore.Models
             }
 
             return etat;
+        }
+
+        public List<Feu> GetListFeu()
+        {
+            List<Feu> feux = new List<Feu>();
+
+            using (SqlConnection connection = new SqlConnection(_connectionString))
+            {
+                connection.Open();
+                string query = "SELECT * from feu";
+
+                using (SqlCommand command = new SqlCommand(query, connection))
+                {
+                    using (SqlDataReader reader = command.ExecuteReader())
+                    {
+                        while (reader.Read())
+                        {
+                            Feu feu = new Feu
+                            {
+                                idFeu = (int)reader["idFeu"],
+                                matricule = reader["matricule"].ToString()
+                            };
+
+                            feux.Add(feu);
+                        }
+                    }
+                }
+            }
+
+            return feux;
         }
 
         public Etat GetEtatFeu(string matricule)
