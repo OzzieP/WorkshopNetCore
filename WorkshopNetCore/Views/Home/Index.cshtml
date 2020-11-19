@@ -1,5 +1,5 @@
-﻿@model Workshop.ViewModels.FeuxViewModel
-@using Workshop.Models
+﻿@model WorkshopNetCore.ViewModels.FeuxViewModel
+@using WorkshopNetCore.Models
 
 @{
     ViewBag.Title = "Home Page";
@@ -10,274 +10,49 @@
     google.charts.setOnLoadCallback(drawChart);
 
     function drawChart() {
-        const feux = @Html.Raw(Html.Action("RefreshChart"));
-        const idFeux = ['C1-HR1', 'C1-HR2', 'C1-VR1', 'C1-VR2']
-        idFeux.forEach((idFeu) => {
-            if (feux[idFeu].etat) {
-                console.log(document.getElementById(idFeu))
-                document.getElementById(idFeu).classList.remove('red');
-                document.getElementById(idFeu).classList.add('green');
-                const idFeuP = idFeu.replace('R', 'P');
-                document.getElementById(idFeuP).classList.remove('green');
-                document.getElementById(idFeuP).classList.add('red');
-            } else {
-                console.log(document.getElementById(idFeu))
-                document.getElementById(idFeu).classList.remove('green');
-                document.getElementById(idFeu).classList.add('red');
-                const idFeuP = idFeu.replace('R', 'P');
-                document.getElementById(idFeuP).classList.remove('red');
-                document.getElementById(idFeuP).classList.add('green');
-            }
-        });
-
-        var data = google.visualization.arrayToDataTable([
-            ['Label', 'Value'],
-            ['C1-HR1', feux['C1-HR1'].nbPassant]
-        ]);
-        var data1 = google.visualization.arrayToDataTable([
-            ['Label', 'Value'],
-            ['C1-HR2', feux['C1-HR2'].nbPassant]
-        ]);
-        var data2 = google.visualization.arrayToDataTable([
-            ['Label', 'Value'],
-            ['C1-VR1', feux['C1-VR1'].nbPassant]
-        ]);
-        var data3 = google.visualization.arrayToDataTable([
-            ['Label', 'Value'],
-            ['C1-VR2', feux['C1-VR2'].nbPassant]
-        ]);
-
-        var options = {
-            width: 200, height: 100,
-            max: 20,
-            greenFrom: 0, greenTo: 4,
-            yellowFrom:4, yellowTo: 8,
-            redFrom: 8, redTo: 20,
-            minorTicks: 2.5,
-            majorTicks: 5
-        };
-
-        var chart = new google.visualization.Gauge(document.getElementById('chart_div'));
-        var chart1 = new google.visualization.Gauge(document.getElementById('chart_div1'));
-        var chart2 = new google.visualization.Gauge(document.getElementById('chart_div2'));
-        var chart3 = new google.visualization.Gauge(document.getElementById('chart_div3'));
-
-
-        chart.draw(data, options);
-        chart1.draw(data1, options);
-        chart2.draw(data2, options);
-        chart3.draw(data3, options);
-
-        setInterval(function () {
-            $.ajax({
-                url: "/home/RefreshChart",
-                dataType: 'json',
-                success: function(res) {
-                    const feux = res;
-
-                    data.setValue(0, 1, feux['C1-HR1'].nbPassant);
-                    data1.setValue(0, 1, feux['C1-HR2'].nbPassant);
-                    data2.setValue(0, 1, feux['C1-VR1'].nbPassant);
-                    data3.setValue(0, 1, feux['C1-VR2'].nbPassant);
-                    const idFeux = ['C1-HR1', 'C1-HR2', 'C1-VR1', 'C1-VR2']
-                    idFeux.forEach((idFeu) =>
-                    {
+        $.ajax({
+            url: "/home/RefreshChart",
+            dataType: 'json',
+            success: function (res) {
+                const feux = res;
+                const idFeux = ['C1-HR1', 'C1-HR2', 'C1-VR1', 'C1-VR2']
+                idFeux.forEach((idFeu) => {
+                    if (feux[idFeu].etat) {
+                        console.log(document.getElementById(idFeu))
+                        document.getElementById(idFeu).classList.remove('red');
+                        document.getElementById(idFeu).classList.add('green');
                         const idFeuP = idFeu.replace('R', 'P');
-                        if (feux[idFeu].etat) {
-                            document.getElementById(idFeu).classList.remove('red');
-                            document.getElementById(idFeu).classList.add('green');
-
-                            document.getElementById(idFeuP).classList.remove('green');
-                            document.getElementById(idFeuP).classList.add('red');
-                        } else {
-                            document.getElementById(idFeu).classList.remove('green');
-                            document.getElementById(idFeu).classList.add('red');
-
-                            document.getElementById(idFeuP).classList.remove('red');
-                            document.getElementById(idFeuP).classList.add('green');
-                        }
+                        document.getElementById(idFeuP).classList.remove('green');
+                        document.getElementById(idFeuP).classList.add('red');
+                    } else {
+                        console.log(document.getElementById(idFeu))
+                        document.getElementById(idFeu).classList.remove('green');
+                        document.getElementById(idFeu).classList.add('red');
+                        const idFeuP = idFeu.replace('R', 'P');
+                        document.getElementById(idFeuP).classList.remove('red');
+                        document.getElementById(idFeuP).classList.add('green');
                     }
-                    );
-                   
-                    chart.draw(data, options);
-                    chart1.draw(data1, options);
-                    chart2.draw(data2, options);
-                    chart3.draw(data3, options);
-                }
-            });
-        }, 10000);
-    }
+                });
 
-
-</script>
-<div class="index-container">
-    <div class="background">
-        <div class="route1">
-            <div class="route1bis"></div>
-        </div>
-        <div class="route2">
-            <div class="route2bis"></div>
-        </div>
-        <div class="carrefour">
-            <div class="arrow1pos">
-                <i class="material-icons arrow">arrow_downward</i>
-            </div>
-            <div class="pieton1">
-                <div class="barp1"></div>
-                <div class="barp1"></div>
-                <div class="barp1"></div>
-                <div class="barp1"></div>
-                <div class="barp1"></div>
-                <div class="barp1"></div>
-                <div class="barp1"></div>
-            </div>
-
-            <div class="arrow2pos">
-                <i class="material-icons arrow">arrow_back</i>
-            </div>
-            <div class="pieton2">
-                <div class="barp2"></div>
-                <div class="barp2"></div>
-                <div class="barp2"></div>
-                <div class="barp2"></div>
-                <div class="barp2"></div>
-                <div class="barp2"></div>
-                <div class="barp2"></div>
-            </div>
-
-            <div class="arrow3pos">
-                <i class="material-icons arrow">arrow_upward</i>
-            </div>
-            <div class="pieton3">
-                <div class="barp1"></div>
-                <div class="barp1"></div>
-                <div class="barp1"></div>
-                <div class="barp1"></div>
-                <div class="barp1"></div>
-                <div class="barp1"></div>
-                <div class="barp1"></div>
-            </div>
-
-            <div class="arrow4pos">
-                <i class="material-icons arrow ">arrow_forward</i>
-            </div>
-            <div class="pieton4">
-                <div class="barp2"></div>
-                <div class="barp2"></div>
-                <div class="barp2"></div>
-                <div class="barp2"></div>
-                <div class="barp2"></div>
-                <div class="barp2"></div>
-                <div class="barp2"></div>
-            </div>
-
-            <div class="G1">
-                <i id="C1-VR1" class="material-icons feux">fiber_manual_record</i>
-                <i id="C1-VP1" class="material-icons feux">directions_walk</i>
-            </div>
-
-            <div class="G2">
-                <i id="C1-HR2" class="material-icons feux">fiber_manual_record</i>
-                <i id="C1-HP2" class="material-icons feux">directions_walk</i>
-            </div>
-
-            <div class="G3">
-                <i id="C1-VR2" class="material-icons feux">fiber_manual_record</i>
-                <i id="C1-VP2" class="material-icons feux">directions_walk</i>
-            </div>
-
-            <div class="G4">
-                <i id="C1-HR1" class="material-icons feux">fiber_manual_record</i>
-                <i id="C1-HP1" class="material-icons feux">directions_walk</i>
-            </div>
-            
-                
-            <div id="chart_div"></div>
-            <div id="chart_div1"></div>
-            <div id="chart_div2"></div>
-            <div id="chart_div3"></div>
-        </div>
-    </div>
-
-    @using (Html.BeginForm("GestionImprevu", "Home", FormMethod.Post, new { @class = "form-group posForm" }))
-    {
-        <div class="inputs">
-            @foreach (Feu item in Model.Feux)
-            {
-                <div class="custom-control custom-radio">
-                    <label class="custom-control-label" for="C1-VR1">
-                        @if (item.matricule == "C1-VR1")
-                        {
-                            <i class="material-icons">arrow_downward</i>
-                        }
-                        else if (item.matricule == "C1-HR2")
-                        {
-                            <i class="material-icons">arrow_back</i>
-                        }
-                        else if (item.matricule == "C1-VR2")
-                        {
-                            <i class="material-icons">arrow_upward</i>
-                        }
-                        else if (item.matricule == "C1-HR1")
-                        {
-                            <i class="material-icons">arrow_forward</i>
-                        }
-                    </label>
-                    @Html.TextBox(item.matricule, null, new { @type = "number", @class = "form-control", @placeholder = "Nombre de voiture a ajouter sur la voie" })
-                </div>
-            }
-        </div>
-        <button type="submit" class="btn btn-primary">Valider</button>
-    }
-</div>
-@model Workshop.ViewModels.FeuxViewModel
-@using Workshop.Models
-
-@{
-    ViewBag.Title = "Home Page";
-}
-
-<script type="text/javascript">
-    google.charts.load('current', {'packages':['gauge']});
-    google.charts.setOnLoadCallback(drawChart);
-
-    function drawChart() {
-        const feux = @Html.Raw(Html.Action("RefreshChart"));
-        const idFeux = ['C1-HR1', 'C1-HR2', 'C1-VR1', 'C1-VR2']
-        idFeux.forEach((idFeu) => {
-            if (feux[idFeu].etat) {
-                console.log(document.getElementById(idFeu))
-                document.getElementById(idFeu).classList.remove('red');
-                document.getElementById(idFeu).classList.add('green');
-                const idFeuP = idFeu.replace('R', 'P');
-                document.getElementById(idFeuP).classList.remove('green');
-                document.getElementById(idFeuP).classList.add('red');
-            } else {
-                console.log(document.getElementById(idFeu))
-                document.getElementById(idFeu).classList.remove('green');
-                document.getElementById(idFeu).classList.add('red');
-                const idFeuP = idFeu.replace('R', 'P');
-                document.getElementById(idFeuP).classList.remove('red');
-                document.getElementById(idFeuP).classList.add('green');
+                var data = google.visualization.arrayToDataTable([
+                    ['Label', 'Value'],
+                    ['C1-HR1', feux['C1-HR1'].nbPassant]
+                ]);
+                var data1 = google.visualization.arrayToDataTable([
+                    ['Label', 'Value'],
+                    ['C1-HR2', feux['C1-HR2'].nbPassant]
+                ]);
+                var data2 = google.visualization.arrayToDataTable([
+                    ['Label', 'Value'],
+                    ['C1-VR1', feux['C1-VR1'].nbPassant]
+                ]);
+                var data3 = google.visualization.arrayToDataTable([
+                    ['Label', 'Value'],
+                    ['C1-VR2', feux['C1-VR2'].nbPassant]
+                ]);
             }
         });
-
-        var data = google.visualization.arrayToDataTable([
-            ['Label', 'Value'],
-            ['C1-HR1', feux['C1-HR1'].nbPassant]
-        ]);
-        var data1 = google.visualization.arrayToDataTable([
-            ['Label', 'Value'],
-            ['C1-HR2', feux['C1-HR2'].nbPassant]
-        ]);
-        var data2 = google.visualization.arrayToDataTable([
-            ['Label', 'Value'],
-            ['C1-VR1', feux['C1-VR1'].nbPassant]
-        ]);
-        var data3 = google.visualization.arrayToDataTable([
-            ['Label', 'Value'],
-            ['C1-VR2', feux['C1-VR2'].nbPassant]
-        ]);
+        
 
         var options = {
             width: 200, height: 100,
