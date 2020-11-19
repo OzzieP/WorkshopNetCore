@@ -10,7 +10,11 @@
     google.charts.setOnLoadCallback(drawChart);
 
     function drawChart() {
-        const feux = @Html.Raw(Component.InvokeAsync("RefreshChart"));
+        const feux = 1;
+        $.getJSON('/home/RefreshChart', function (result) {
+            console.log(result);
+            feux = result;
+        });
         const idFeux = ['C1-HR1', 'C1-HR2', 'C1-VR1', 'C1-VR2']
         idFeux.forEach((idFeu) => {
             if (feux[idFeu].etat) {
