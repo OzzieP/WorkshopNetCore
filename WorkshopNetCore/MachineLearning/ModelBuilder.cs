@@ -19,11 +19,15 @@ namespace WorkshopNetCore.MachineLearning
 
         public static List<FeuForecast> FeuForecasts;
 
-
         public static void CreateModel(int idFeu, int numWeek)
         {
-            string rootDir = Path.GetFullPath(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "../../../"));
-            string modelPath = Path.Combine(rootDir, "MachineLearning", "Data", "MLModel.zip");
+            // Pour en local
+            //string rootDir = Path.GetFullPath(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "../../../"));
+            //string modelPath = Path.Combine(rootDir, "wwwroot", "Data", "MLModel.zip");
+
+            // Pour sur le serveur
+            string modelPath = @"C:\inetpub\wwwroot\wwwroot\Data\MLModel.zip";
+
 
             string query = "SELECT CAST(f.idFeu as REAL) AS IdFeu, f.matricule AS Feu, CAST(e.nbPassant as REAL) AS NbPassants, CAST(e.jour as REAL) AS Jour, CAST(e.numWeek as REAL) as Semaine " +
                 "FROM etat e " +
